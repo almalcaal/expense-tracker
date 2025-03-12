@@ -9,7 +9,7 @@ type User {
 }
 
 type Query {
-    users: [User!]
+    # users: [User!] this was for testing purposes
     authUser: User
     user(userId: ID!): User
 }
