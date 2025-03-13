@@ -2,6 +2,7 @@ import express from "express";
 import http from "http";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
 
 import passport from "passport";
 import session from "express-session";
@@ -22,6 +23,8 @@ import { configurePassport } from "./passport/passport.config.js";
 
 dotenv.config();
 configurePassport();
+
+const __dirname = path.resolve();
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -72,6 +75,19 @@ app.use(
     context: async ({ req, res }) => buildContext({ req, res }),
   })
 );
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+  // any route that is not api will be redirected to index.html
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running...");
+  });
+}
 
 // modified server startup
 await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
