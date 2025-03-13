@@ -27,7 +27,7 @@ export const Card = ({ transaction }) => {
   const [deleteTransaction, { loading, errorUnused }] = useMutation(
     DELETE_TRANSACTION,
     {
-      refetchQueries: ["GetTransactions"],
+      refetchQueries: ["GetTransactions", "GetTransactionStatistics"],
     }
   );
 
