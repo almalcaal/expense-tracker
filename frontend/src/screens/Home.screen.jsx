@@ -8,6 +8,7 @@ import { MdLogout } from "react-icons/md";
 import { useMutation } from "@apollo/client";
 import { LOGOUT } from "../graphql/mutations/user.mutation.js";
 import toast from "react-hot-toast";
+import { Loader } from "../components/common/Loader.component.jsx";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -73,9 +74,7 @@ export const HomeScreen = () => {
             />
           )}
           {/* loading spinner */}
-          {loading && (
-            <div className="w-6 h-6 border-t-2 border-b-2 mx-2 rounded-full animate-spin"></div>
-          )}
+          {loading && <Loader />}
         </div>
         <div className="flex flex-wrap w-full justify-center items-center gap-6">
           <div className="h-[330px] w-[330px] md:h-[360px] md:w-[360px]  ">
