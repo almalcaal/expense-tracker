@@ -16,7 +16,9 @@ export const TransactionFormScreen = () => {
   console.log("transaction data:", data);
 
   const [updateTransaction, { loading: loadingUpdateTransaction }] =
-    useMutation(UPDATE_TRANSACTION);
+    useMutation(UPDATE_TRANSACTION, {
+      refetchQueries: ["GetTransactionStatistics"],
+    });
 
   const [formData, setFormData] = useState({
     description: data?.transaction?.description || "",
