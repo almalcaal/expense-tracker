@@ -37,18 +37,17 @@ export const HomeScreen = () => {
     ],
   };
 
-  const [logout, { loading, errorThatCanBeUsedButWillNotBe }] = useMutation(
-    LOGOUT,
-    {
+  const [logout, { loading, errorThatCanBeUsedButWillNotBe, client }] =
+    useMutation(LOGOUT, {
       refetchQueries: ["GetAuthenticatedUser"], // this matches the "query GetAuthenticatedUser" in user.query.js
-    }
-  );
+    });
 
   const handleLogout = async () => {
     try {
       await logout();
       // clear the apollo client cache from docs
       // https://www.apollographql.com/docs/react/caching/advanced-topics
+      client.resetStore();
     } catch (err) {
       console.log("Error logging out:", err);
       toast.error(err.message);
