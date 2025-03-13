@@ -38,9 +38,9 @@ function App() {
           element={!data?.authUser ? <SignUpScreen /> : <Navigate to="/" />}
         />
         <Route
-          path="/transaction/:transactionId"
+          path="/transaction/:id"
           element={
-            !data?.authUser ? (
+            data?.authUser ? (
               <TransactionFormScreen />
             ) : (
               <Navigate to="/login" />

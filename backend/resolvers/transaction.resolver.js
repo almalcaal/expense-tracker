@@ -10,7 +10,9 @@ const transactionResolver = {
 
         const userId = context.getUser()._id;
 
-        const transactions = await Transaction.find({ userId });
+        // had an issue earlier with having the amount be NULL which cause a major headache to debug, so lets remove all transactions with the value of null and then return, this is just a hack for now. i don't even know how that could've happened
+        let transactions = await Transaction.find({ userId });
+        transactions = transactions.filter((tx) => tx.amount !== null);
         return transactions;
       } catch (err) {
         console.log("Error in transactions transactionResolver:", err);
