@@ -30,8 +30,33 @@ const transactionResolver = {
         throw new Error(err.message || "Internal server error");
       }
     },
-    // todo, add categoryStatistics query
+
+    categoryStatistics: async (_, __, context) => {
+      if (!context.getUser()) throw new Error("Unauthorized");
+
+      const userId = context.getUser()._id;
+      const transactions = await Transaction.find({ userId });
+      const categoryMap = {};
+
+      transactions.forEach((transaction) => {
+        if (!categoryMap[transaction.category]) {
+          categoryMap[transaction.category] = 0;
+        }
+        categoryMap[transaction.category] += transaction.amount;
+      });
+
+      // keep in mind to have the names line up, having it named "totalAmount" and "category" here as the actual values we're returning in the object is due to how we defined it in transaction.typeDef.js:
+      // type categoryStatistics {
+      //     category: String!
+      //     totalAmount: Float!
+      // }
+      return Object.entries(categoryMap).map(([category, totalAmount]) => ({
+        category,
+        totalAmount,
+      }));
+    },
   },
+
   Mutation: {
     createTransaction: async (_, { input }, context) => {
       try {

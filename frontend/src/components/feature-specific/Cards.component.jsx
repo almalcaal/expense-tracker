@@ -5,7 +5,7 @@ import { GET_TRANSACTIONS } from "../../graphql/queries/transaction.query.js";
 export const Cards = () => {
   const { loading, data, error } = useQuery(GET_TRANSACTIONS);
 
-  console.log("GraphQL Response:", data);
+  // console.log("GraphQL Response:", data);
 
   return (
     <div className="w-full px-10 min-h-[40vh]">
