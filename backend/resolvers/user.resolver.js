@@ -70,6 +70,9 @@ const userResolver = {
     login: async (_, { input }, context) => {
       try {
         const { username, password } = input;
+        if (!username || !password) {
+          throw new Error("All fields required");
+        }
         const { user } = await context.authenticate("graphql-local", {
           username,
           password,
@@ -83,17 +86,18 @@ const userResolver = {
       }
     },
 
-    logout: async (_, __dirname, context) => {
+    logout: async (_, __, context) => {
       try {
-        await context.logout();
-        req.session.destroy((err) => {
-          if (err) throw err;
-
-          res.clearCookie("connect.sid");
-
-          // looking at user.typeDefs you'll see that logout mutation returns an object that holds a key-message with value-String and that's what we're returning here
-          return { message: "Logged out successfully" };
+        await new Promise((resolve, reject) => {
+          context.req.session.destroy((err) => {
+            if (err) reject(err);
+            resolve();
+          });
         });
+
+        context.res.clearCookie("connect.sid");
+
+        return { message: "Logged out successfully" };
       } catch (err) {
         console.log("Error in logout userResolver:", err);
         throw new Error(err.message || "Internal server error");

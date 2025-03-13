@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { InputField } from "../components/common/InputField.component.jsx";
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "../graphql/mutations/user.mutation.js";
+import toast from "react-hot-toast";
 
 export const LoginScreen = () => {
   const [loginData, setLoginData] = useState({
@@ -8,17 +11,28 @@ export const LoginScreen = () => {
     password: "",
   });
 
+  const [login, { loading, errorNotBeingUsed }] = useMutation(LOGIN, {
+    refetchQueries: ["GetAuthenticatedUser"],
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!loginData.username || !loginData.password)
+      return toast.error("All fields are required");
+    try {
+      await login({ variables: { input: loginData } });
+    } catch (err) {
+      console.log("Error logging in:", err);
+      toast.error(err.message);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(loginData);
   };
 
   return (
@@ -55,8 +69,9 @@ export const LoginScreen = () => {
                   className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black  focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300
 										disabled:opacity-50 disabled:cursor-not-allowed
 									"
+                  disabled={loading}
                 >
-                  Login
+                  {loading ? "Loading" : "Login"}
                 </button>
               </div>
             </form>
