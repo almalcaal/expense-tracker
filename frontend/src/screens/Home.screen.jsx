@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
@@ -10,7 +11,7 @@ import { LOGOUT } from "../graphql/mutations/user.mutation.js";
 import toast from "react-hot-toast";
 import { Loader } from "../components/common/Loader.component.jsx";
 import { GET_TRANSACTION_STATISTICS } from "../graphql/queries/transaction.query.js";
-import { useEffect, useState } from "react";
+import { GET_AUTHENTICATED_USER } from "../graphql/queries/user.query.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -45,8 +46,10 @@ export const HomeScreen = () => {
     });
 
   const { data } = useQuery(GET_TRANSACTION_STATISTICS);
+  // console.log("categoryStats:", data);
 
-  console.log("categoryStats:", data);
+  const { data: authUserData } = useQuery(GET_AUTHENTICATED_USER);
+  console.log("authUserData:", authUserData);
 
   const [chartData, setChartData] = useState({
     labels: [],
@@ -124,7 +127,7 @@ export const HomeScreen = () => {
             Spend wisely, track wisely
           </p>
           <img
-            src={"https://tecdn.b-cdn.net/img/new/avatars/2.webp"}
+            src={authUserData?.authUser.profilePicture}
             className="w-11 h-11 rounded-full border cursor-pointer"
             alt="Avatar"
           />
