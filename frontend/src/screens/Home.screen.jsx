@@ -5,10 +5,11 @@ import { Cards } from "../components/feature-specific/Cards.component.jsx";
 import { TransactionForm } from "../components/feature-specific/TransactionForm.component.jsx";
 
 import { MdLogout } from "react-icons/md";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { LOGOUT } from "../graphql/mutations/user.mutation.js";
 import toast from "react-hot-toast";
 import { Loader } from "../components/common/Loader.component.jsx";
+import { GET_TRANSACTION_STATISTICS } from "../graphql/queries/transaction.query.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -41,6 +42,10 @@ export const HomeScreen = () => {
     useMutation(LOGOUT, {
       refetchQueries: ["GetAuthenticatedUser"], // this matches the "query GetAuthenticatedUser" in user.query.js
     });
+
+  const { data } = useQuery(GET_TRANSACTION_STATISTICS);
+
+  console.log("categoryStats:", data);
 
   const handleLogout = async () => {
     try {
