@@ -24,12 +24,12 @@
     "@graphql-tools/merge": "^9.0.22",
     "bcryptjs": "^3.0.2",
     "connect-mongodb-session": "^5.0.0",
-    "cron": "^4.1.0",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "graphql": "^16.10.0",
     "graphql-passport": "^0.6.8",
     "mongoose": "^8.12.1",
+    "node-cron": "^3.0.3",
     "passport": "^0.7.0"
   }
 }
