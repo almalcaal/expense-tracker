@@ -1,4 +1,4 @@
-import cron from "node-cron";
+import cron from "cron";
 import https from "https";
 
 const URL = "https://expense-tracker-jawr.onrender.com/";
