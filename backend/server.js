@@ -20,9 +20,12 @@ import fusedResolvers from "./resolvers/index.js";
 
 import { connectDB } from "./lib/db.js";
 import { configurePassport } from "./passport/passport.config.js";
+import job from "./cron.js";
 
 dotenv.config();
 configurePassport();
+
+job.start();
 
 const __dirname = path.resolve();
 
